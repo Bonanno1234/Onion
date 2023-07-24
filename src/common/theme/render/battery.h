@@ -129,4 +129,37 @@ SDL_Surface *theme_batterySurface(int percentage)
     return theme_batterySurfaceWithBg(percentage, NULL);
 }
 
+SDL_Surface *theme_battery_fullscreen_Surface(int percentage)
+{
+    // Create a surface to display the battery in full screen
+    BatteryPercentage_s *style = &theme()->batteryPercentage;
+    bool visible = true;
+
+    // Currently charging, hide text
+    if (percentage == 500)
+        visible = false;
+
+    TTF_Font *font = resource_getFont(BATTERY_FULL_SCREEN);
+
+    // Battery percentage text
+    char buffer[5];
+    sprintf(buffer, "%d%%", percentage);
+    SDL_Surface *text = TTF_RenderUTF8_Blended(font, buffer, style->color);
+    SDL_SetAlpha(text, 0, SDL_ALPHA_TRANSPARENT); /* important */
+
+    SDL_Surface *image = SDL_CreateRGBSurface(
+        0, text->w, text->h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF,
+        0xFF000000); /* important */
+
+    SDL_Rect rect_text = {0, 0, text->w, text->h};
+    
+    if (visible)
+        SDL_BlitSurface(text, NULL, image, &rect_text);
+
+    SDL_FreeSurface(text);
+ 
+    return image;
+}
+
+
 #endif // RENDER_BATTERY_H__

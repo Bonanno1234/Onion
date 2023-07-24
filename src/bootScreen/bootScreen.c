@@ -40,6 +40,10 @@ int main(int argc, char *argv[])
         background = theme_loadImage(theme_path, "extra/Screen_Off");
         bShowBat = 1;
     }
+    else if (argc > 1 && strcmp(argv[1], "Battery_Full_Screen") == 0) {
+        background = theme_loadImage(theme_path, "background");
+        bShowBat = 2;
+    }
     else {
         background = theme_loadImage(theme_path, "extra/bootScreen");
     }
@@ -77,8 +81,18 @@ int main(int argc, char *argv[])
     }
 
     if (bShowBat == 1) {
-        SDL_Surface *battery = theme_batterySurface(battery_getPercentage());
+        SDL_Surface *battery = theme_battery_fullscreen_Surface(battery_getPercentage());
         SDL_Rect battery_rect = {596 - battery->w / 2, 30 - battery->h / 2};
+        SDL_BlitSurface(battery, NULL, screen, &battery_rect);
+        SDL_FreeSurface(battery);
+        resources_free();
+    }    
+    else if (bShowBat == 2) {
+        // Full screen display
+        SDL_Surface *battery = theme_battery_fullscreen_Surface(battery_getPercentage());
+        int x_offset = (int)((640 - battery->w)/2);
+        int y_offset = (int)((480 - battery->h)/2);
+        SDL_Rect battery_rect = {x_offset, y_offset, 640, 480};
         SDL_BlitSurface(battery, NULL, screen, &battery_rect);
         SDL_FreeSurface(battery);
         resources_free();

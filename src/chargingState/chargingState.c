@@ -251,6 +251,8 @@ int main(void)
 
     if (turn_off) {
 #ifdef PLATFORM_MIYOOMINI
+        display_setScreen(true);
+        system("bootScreen \"Battery_Full_Screen\"; sleep 1");
         display_setScreen(false);
         system("shutdown; sleep 10");
 #endif

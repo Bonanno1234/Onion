@@ -61,6 +61,7 @@ typedef enum theme_fonts {
     GRID3x4,
     LIST,
     BATTERY,
+    BATTERY_FULL_SCREEN,
     fonts_count
 } ThemeFonts;
 
@@ -202,6 +203,9 @@ TTF_Font *_loadFont(ThemeFonts request)
     case BATTERY:
         return theme_loadFont(t->path, t->batteryPercentage.font,
                               t->batteryPercentage.size);
+    case BATTERY_FULL_SCREEN:
+        return theme_loadFont(t->path, t->batteryPercentage.font,
+                              100);
     default:
         break;
     }
